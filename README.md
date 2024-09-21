@@ -65,6 +65,25 @@ streamlit run exp_2.py
 
 Contribuições são bem-vindas! Se você tiver sugestões de melhorias ou encontrar problemas, fique à vontade para abrir uma issue ou enviar um pull request.
 
+##  Citação
+
+Se você utilizar este código ou artigo em sua pesquisa ou projeto, por favor, cite-o da seguinte forma:
+
+**Formato ABNT:**
+NASCIMENTO, Igor M. *Análise Comparativa de Algoritmos de Otimização Evolutiva Aplicados a Problemas de Engenharia*. Disponível em:[imnascimento.github.io](https://imnascimento.github.io/Portifolio/assets/pdf/artigos/UFJF___An%C3%A1lise_Comparativa_de_Algoritmos_de_Otimiza%C3%A7%C3%A3o_Evolutiva_Aplicados_a_Problemas_de_Engenharia.pdf). Acesso em: 21/09/2024.
+
+**BibTeX:**
+```bibtex
+@misc{EngEvoOpt,
+  author = {Nascimento, Igor M.},
+  title = {Análise Comparativa de Algoritmos de Otimização Evolutiva Aplicados a Problemas de Engenharia},
+  year = {2024},
+  howpublished = {\url{https://imnascimento.github.io/Portifolio/assets/pdf/artigos/UFJF___An%C3%A1lise_Comparativa_de_Algoritmos_de_Otimiza%C3%A7%C3%A3o_Evolutiva_Aplicados_a_Problemas_de_Engenharia.pdf}},
+  note = {Acesso em: 21/09/2024}
+}
+```
+
+
 ## Contato
 
 Para mais informações ou para acesso ao artigo, entre em contato através de [igor.muniz@estudante.ufjf.br](mailto:igor.muniz@estudante.ufjf.br).
