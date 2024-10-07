@@ -65,6 +65,10 @@ streamlit run exp_2.py
 
 Contribuições são bem-vindas! Se você tiver sugestões de melhorias ou encontrar problemas, fique à vontade para abrir uma issue ou enviar um pull request.
 
+## Branch penaltyMethod
+Nessa branch falamos sobre o relatório de aplicação de penalidades que foram propostas no artigo de Deb(2000) na seção 3. Esse relatório está disponivel em:
+[imnascimento.github.io](https://imnascimento.github.io/Portifolio/assets/pdf/artigos/UFJF___An%C3%A1lise_Comparativa_de_Algoritmos_de_Otimiza%C3%A7%C3%A3o_Evolutiva_com_Penalidades.pdf)
+
 ##  Citação
 
 Se você utilizar este código ou artigo em sua pesquisa ou projeto, por favor, cite-o da seguinte forma:
