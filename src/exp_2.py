@@ -5,7 +5,6 @@ from mealpy.swarm_based import CSA
 from mealpy import FloatVar
 from lib.apm import AdaptivePenaltyMethod
 import plotly.express as px
-import plotly.graph_objects as go
 import pandas as pd
 import streamlit as st
 
@@ -13,12 +12,6 @@ class APMOptimization:
     def __init__(self, number_of_constraints, variant="APM", model_class=EP.OriginalEP, num_executions=30, num_evaluations=10000):
         """
         Construtor.
-        Parameters:
-        - number_of_constraints: número de restrições do problema.
-        - variant: variante do método de penalidade adaptativa. {APM, AMP_Med_3, AMP_Worst, APM_Spor_Mono}
-        - model_class: classe do modelo de otimização (ex: EP da biblioteca Mealpy)
-        - num_executions: número de execuções independentes para a otimização.
-        - num_evaluations: número total de avaliações da função objetivo.
         """
         self.number_of_constraints = number_of_constraints
         self.variant = variant
@@ -72,22 +65,14 @@ class APMOptimization:
         violations = [g1(solution), g2(solution), g3(solution), g4(solution), g5(solution), g6(solution), 
                     g7(solution), g8(solution), g9(solution), g10(solution), g11(solution)]
         
-        # Penalização para violações (se violação > 0, é aplicada uma penalização)
-        penalty = np.sum([violation**2 if violation > 0 else 0 for violation in violations])
-        
-        # Retorna o valor da função objetivo (W) + penalização para restrições
-        return W , violations
+        # Retorna o valor da função objetivo (W) + as violações de restrições
+        return W, violations
 
     def penalized_objective_function(self, solution, population):
         """
         Função objetiva penalizada que calcula o fitness usando as penalidades adaptativas.
-        Parameters:
-        - solution: solução para avaliar
-        - population: população para cálculo dos coeficientes de penalidade
-        
-        Returns:
-        - fitness penalizado
         """
+        # Calcula a função objetivo e as violações
         V, violations = self.objective_function(solution)
 
         # Calcular valores da função objetivo e das violações de restrições para a população
@@ -97,9 +82,9 @@ class APMOptimization:
         for i in range(len(population)):
             obj_val, viol = self.objective_function(population[i])
             objective_values[i] = obj_val
-            constraint_violations[i] = viol[:self.number_of_constraints]  # Usar apenas as primeiras 3 restrições
+            constraint_violations[i] = viol[:self.number_of_constraints]
 
-        # Calcular os coeficientes de penalidade
+        # Calcular os coeficientes de penalidade usando o método APM
         penalty_coefficients = self.apm.calculate_penalty_coefficients(objective_values, constraint_violations)
 
         # Calcular o fitness penalizado
@@ -109,17 +94,9 @@ class APMOptimization:
 
     def run_optimization(self, lower_bounds, upper_bounds, pop_size=50):
         """
-        Executa a otimização múltiplas vezes e retorna as métricas para o volume V.
-        
-        Parameters:
-        - lower_bounds: limites inferiores para as variáveis de decisão.
-        - upper_bounds: limites superiores para as variáveis de decisão.
-        - pop_size: tamanho da população.
-        
-        Returns:
-        - métricas de Melhor, Mediana, Média, Desvio Padrão e Pior para o volume V.
+        Executa a otimização múltiplas vezes e retorna as métricas.
         """
-        # Calcular o número de epochs com base no número total de avaliações e no tamanho da população
+        # Calcular o número de epochs
         epochs = self.num_evaluations // pop_size
 
         results = []
@@ -160,7 +137,7 @@ def main():
     st.set_page_config(page_title="Otimização de EP e CSA com Restrições", page_icon="📊", layout="wide")
 
     # Parâmetros do problema
-    number_of_constraints = 11 # Número de variáveis de dicsão, no caso do problema da mola são x1, x2 e x3
+    number_of_constraints = 11  # Número de restrições no problema do redutor de velocidade
 
     variants = ["APM", "APM_Med_3", "APM_Worst", "APM_Spor_Mono"]
     model_classes = {"EP": EP.OriginalEP, "CSA": CSA.OriginalCSA}
@@ -180,8 +157,8 @@ def main():
         return
     
     # Limites das variáveis de decisão
-    lower_bounds = [2.6, 0.7, 17, 7.3, 7.8, 2.9, 2.9]  # [x1, x2, x3, x4, x5, x6, x7]
-    upper_bounds = [3.6, 0.8, 28, 8.3, 8.3, 3.9, 3.9]  # [x1, x2, x3, x4, x5, x6, x7]
+    lower_bounds = [2.6, 0.7, 17, 7.3, 7.8, 2.9, 2.9]
+    upper_bounds = [3.6, 0.8, 28, 8.3, 8.3, 3.9, 3.9]
 
     resultados = []
     col1, col2 = st.columns(2)
@@ -202,7 +179,8 @@ def main():
                 melhor, mediana, media, dp, pior = optimizer.run_optimization(lower_bounds, upper_bounds, pop_size=pop_size)
                 resultados.append((key, variant, melhor, mediana, media, dp, pior))
         end_time = time.time()
-        # Calcular horas, minutos e segundos que foram necessários para a execução
+
+        # Calcular tempo de execução
         tempo_execucao = end_time - start_time
         horas = int(tempo_execucao // 3600)
         minutos = int((tempo_execucao % 3600) // 60)
@@ -214,7 +192,7 @@ def main():
     # Criar dataframe com os resultados
     df = pd.DataFrame(resultados, columns=["Algoritmo", "Variante", "Melhor", "Mediana", "Média", "Desvio Padrão", "Pior"])
 
-    # Divindindo o Dataframe por algoritmo
+    # Dividir o Dataframe por algoritmo
     df_ep = df[df["Algoritmo"] == "EP"]
     df_ep = df_ep.drop(columns=["Algoritmo"])
     df_csa = df[df["Algoritmo"] == "CSA"]

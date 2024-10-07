@@ -100,6 +100,8 @@ class AdaptivePenaltyMethod:
                 fitness_values[i] = objective_function_values[i]
 
         return fitness_values
+    
+    
 
     def calculate_single_fitness(self, objective_function_value, constraint_violation_values, penalty_coefficients):
         """
